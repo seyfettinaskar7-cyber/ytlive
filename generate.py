@@ -26,6 +26,9 @@ class YouTubePlaylistGenerator:
         self.cache_file = '.channel_cache.json'
         self.logos_dir = 'logos'
         self.channels_dir = 'channels'
+        
+        # Hata veren fonksiyon çağrılmadan önce boş bir cache sözlüğü tanımlayalım
+        self.cache = {} 
         self.load_cache()
         
         # Create directories
@@ -34,7 +37,30 @@ class YouTubePlaylistGenerator:
                 os.makedirs(directory)
                 print(f"📁 Created directory: {directory}/")
 
-    import time
+    # 🟢 EKSİK OLAN METOT: Dosyadan cache yükler veya yoksa oluşturur
+    def load_cache(self):
+        """Önbellek dosyasını okur, yoksa boş bir cache başlatır."""
+        if os.path.exists(self.cache_file):
+            try:
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                    self.cache = json.load(f)
+                print(f"📦 Loaded cache from {self.cache_file}")
+            except Exception as e:
+                print(f"⚠️ Cache dosyası okunurken hata oluştu, sıfırlanıyor: {e}")
+                self.cache = {}
+        else:
+            self.cache = {}
+
+    # 🟢 YARDIMCI METOT: İlerleyen satırlarda cache kaydetmek isterseniz gerekir
+    def save_cache(self):
+        """Mevcut önbelleği dosyaya kaydeder."""
+        try:
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"⚠️ Cache kaydedilirken hata oluştu: {e}")
+            
+import time
 from playwright.sync_api import sync_playwright
 
 def get_update_cookies(output_file="cookies.txt"):
