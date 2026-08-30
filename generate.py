@@ -37,7 +37,6 @@ class YouTubePlaylistGenerator:
     def get_update_cookies(output_file="cookies.txt"):
         
     print("[+] Tarayıcı otomasyonu başlatılıyor, YouTube çerezleri toplanıyor...")
-    
     with sync_playwright() as p:
         # Gerçek kullanıcı gibi davranması için Chromium başlatıyoruz
         browser = p.chromium.launch(headless=True) # Arka planda gizli çalışması için headless=True
