@@ -53,7 +53,7 @@ class YouTubePlaylistGenerator:
         
             # YouTube ana sayfasına veya robots.txt sayfasına gidiyoruz (Bot korumasını tetiklememek için)
             page.goto("https://www.youtube.com/robots.txt", wait_until="networkidle")
-            time.sleep(3) # Sayfanın ve çerezlerin tamamen oturması için kısa bir bekleme
+            time.sleep(20) # Sayfanın ve çerezlerin tamamen oturması için kısa bir bekleme
         
             # Playwright context yapısından tüm aktif çerezleri çekiyoruz
             playwright_cookies = context.cookies()
