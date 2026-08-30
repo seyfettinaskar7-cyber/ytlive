@@ -149,7 +149,25 @@ class YouTubePlaylistGenerator:
             if keyword in channel_name_lower:
                 print(f"  🌍 Found Ghanaian keyword: '{keyword}', using MX")
                 return 'MX'
+
+        # TURKEY CHANNELS
+        turkey_keywords = [
+            # Country names
+            'istanbul', 'ankara', 'izmir', 'hatay',
+            
+            # Specific Turkish channels
+            'TRT Haber', 'Akit TV', 'CNN Türk', 'NTV',
+            'A Haber', 'Habertürk TV', 'Halktv', 'Sözcü Televizyonu',
+            'TGRT Haber TV', 'Flash Haber TV', 'Haber Global TV', 'TV100',
+            'Bloomberg HT', 'Bengü Türk', 'KRT TV', 'Ulusal Kanal',
+            'Diyanet Çocuk', 'EKOTÜRK TV', 'beIN SPORTS Türkiye', 'CNBC-e'
+        ]
         
+        for keyword in ghanaian_keywords:
+            if keyword in channel_name_lower:
+                print(f"  🌍 Found Turkey keyword: '{keyword}', using TR")
+                return 'TR'
+            
         # Default to UK if no match
         print(f"  🌍 No country detected, using default: UK")
         return 'UK'
