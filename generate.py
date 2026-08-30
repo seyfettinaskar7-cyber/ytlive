@@ -35,34 +35,38 @@ class YouTubePlaylistGenerator:
                 print(f"📁 Created directory: {directory}/")
 
     def get_update_cookies(output_file="cookies.txt"):
+        """
+        Arka planda gizli tarayıcı açarak YouTube'dan güncel çerezleri toplar
+        ve yt-dlp için Netscape formatında kaydeder.
+        """
+        print("[+] Tarayıcı otomasyonu başlatılıyor, YouTube çerezleri toplanıyor...")
+    
+        with sync_playwright() as p:
+            # Gerçek kullanıcı gibi davranması için Chromium başlatıyoruz
+            browser = p.chromium.launch(headless=True) # Arka planda gizli çalışması için headless=True
         
-    print("[+] Tarayıcı otomasyonu başlatılıyor, YouTube çerezleri toplanıyor...")
-    with sync_playwright() as p:
-        # Gerçek kullanıcı gibi davranması için Chromium başlatıyoruz
-        browser = p.chromium.launch(headless=True) # Arka planda gizli çalışması için headless=True
-        
-        # YouTube tespit mekanizmalarını taklit eden bir User-Agent tanımlıyoruz
-        context = browser.new_context(
+            # YouTube tespit mekanizmalarını taklit eden bir User-Agent tanımlıyoruz
+            context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
         page = context.new_page()
         
-        # YouTube ana sayfasına veya robots.txt sayfasına gidiyoruz (Bot korumasını tetiklememek için)
-        page.goto("https://www.youtube.com/robots.txt", wait_until="networkidle")
-        time.sleep(3) # Sayfanın ve çerezlerin tamamen oturması için kısa bir bekleme
+            # YouTube ana sayfasına veya robots.txt sayfasına gidiyoruz (Bot korumasını tetiklememek için)
+            page.goto("https://www.youtube.com/robots.txt", wait_until="networkidle")
+            time.sleep(3) # Sayfanın ve çerezlerin tamamen oturması için kısa bir bekleme
         
-        # Playwright context yapısından tüm aktif çerezleri çekiyoruz
-        playwright_cookies = context.cookies()
+            # Playwright context yapısından tüm aktif çerezleri çekiyoruz
+            playwright_cookies = context.cookies()
         
-        # Çerezleri yt-dlp'nin anlayacağı Netscape Formatına dönüştürme işlemi
-        netscape_lines = [
+            # Çerezleri yt-dlp'nin anlayacağı Netscape Formatına dönüştürme işlemi
+            netscape_lines = [
             "# Netscape HTTP Cookie File",
             "# http://haxx.se",
             "# This is a generated file!  Do not edit.",
             ""
         ]
         
-        for c in playwright_cookies:
+            for c in playwright_cookies:
             # Eksik veya boş değerleri Netscape kurallarına göre dolduruyoruz
             domain = c.get('domain', '.youtube.com')
             include_subdomains = "TRUE" if domain.startswith('.') else "FALSE"
@@ -77,13 +81,13 @@ class YouTubePlaylistGenerator:
             line = f"{domain}\t{include_subdomains}\t{path}\t{secure}\t{expires}\t{name}\t{value}"
             netscape_lines.append(line)
         
-        # Dosyayı diske kaydediyoruz
-        with open(output_file, "w", encoding="utf-8") as f:
+            # Dosyayı diske kaydediyoruz
+            with open(output_file, "w", encoding="utf-8") as f:
             f.write("\n".join(netscape_lines))
             
-        browser.close()
-        print(f"[+] Çerezler başarıyla güncellendi ve '{output_file}' dosyasına yazıldı.")
-      
+            browser.close()
+            print(f"[+] Çerezler başarıyla güncellendi ve '{output_file}' dosyasına yazıldı.")
+        
     def load_cache(self):
         """Load cached channel data"""
         try:
