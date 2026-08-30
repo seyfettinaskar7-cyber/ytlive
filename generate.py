@@ -35,10 +35,7 @@ class YouTubePlaylistGenerator:
                 print(f"📁 Created directory: {directory}/")
 
     def get_update_cookies(output_file="cookies.txt"):
-    """
-    Arka planda gizli tarayıcı açarak YouTube'dan güncel çerezleri toplar
-    ve yt-dlp için Netscape formatında kaydeder.
-    """
+        
     print("[+] Tarayıcı otomasyonu başlatılıyor, YouTube çerezleri toplanıyor...")
     
     with sync_playwright() as p:
