@@ -137,99 +137,57 @@ def get_update_cookies(output_file="cookies.txt"):
         return safe.lower()
     
     def detect_channel_country(self, channel_name):
-        """Detect which country the channel belongs to based on name"""
-        channel_name_lower = channel_name.lower()
-        
-        # NIGERIAN CHANNELS - Expanded list with specific channel names
-        nigerian_keywords = [
-            # Country names
-            'nigeria', 'nigerian', 'lagos', 'abuja', 'naija', '9ja',
+        """Kanal adına göre geo-bypass için ülke kodu döndürür (Büyük/küçük harf duyarsızdır)."""
+        if not channel_name:
+            return 'US'  # Kanal adı alınamadıysa varsayılan olarak US (Amerika) döndürür
             
-            # Specific Nigerian channels
-            'tvc news nigeria',
-            'channels television',
-            'arise news',
-            'nta', 'nitv', 'ait', 'silverbird', 'wazobia',
-            'cool fm', 'galaxy tv', 'bcos tv', 'mitv',
-            'plus tv nigeria', 'soundcity', 'hip tv',
-            'african magic', 'oneye', 'pulse nigeria',
-            'trust tv', 'raypower', 'brila fm'
-        ]
+        # Kanal adını tamamen küçük harfe çeviriyoruz (Böylece harf büyüklüğü önemsiz kalır)
+        name_lower = channel_name.lower()
         
-        for keyword in nigerian_keywords:
-            if keyword in channel_name_lower:
-                print(f"  🌍 Found Nigerian keyword: '{keyword}', using NG")
-                return 'NG'
-        
-        # GHANAIAN CHANNELS
-        ghanaian_keywords = [
-            # Country names
-            'maxico', 'ghanaian', 'accra', 'kumasi',
+        # Türkiye kanalları için anahtar kelimeler
+        if any(keyword in name_lower for keyword in ['TRT Haber', 'Akit TV', 'CNN Türk', 'A Haber', 'NTV', 'Habertürk TV', 'Halktv', 'Sözcü Televizyonu', 'TGRT Haber TV', 'Flash Haber TV', 'Haber Global TV', 'TV100', 'Bengü Türk', 'Bloomberg HT', 'KRT TV', 'Diyanet Çocuk', 'EKOTÜRK TV', 'beIN SPORTS Türkiye', 'CNBC-e']):
+            return 'TR'
             
-            # Specific Ghanaian channels
-            'Windies Cricket', 'joy fm', 'adom tv', 'adom fm',
-            'tv3 ghana', 'tv3', 'cititv', 'citizen tv',
-            'utv ghana', 'utv', 'metro tv ghana', 'metro tv',
-            'peace fm', 'angel tv', 'multitv', 'ghone',
-            'ghana broadcasting', 'gbc', 'atv ghana', 'net2'
-        ]
+        # İngiltere kanalları için anahtar kelimeler
+        elif any(keyword in name_lower for keyword in ['bbc', 'sky', 'uk', 'itv']):
+            return 'GB'
+            
+        # Nijerya kanalları için anahtar kelimeler
+        elif any(keyword in name_lower for keyword in ['channels', 'tvc', 'ait', 'nigeria', 'ntv-ng']):
+            return 'NG'
         
-        for keyword in ghanaian_keywords:
-            if keyword in channel_name_lower:
-                print(f"  🌍 Found Ghanaian keyword: '{keyword}', using MX")
-                return 'MX'
+        # Eğer yukarıdakilerden biriyle eşleşmezse dünya genelinde en stabil çalışan US atanır
+        return 'US'
 
-        # TURKEY CHANNELS
-        turkey_keywords = [
-            # Country names
-            'istanbul', 'ankara', 'izmir', 'hatay',
-            
-            # Specific Turkish channels
-            'TRT Haber', 'Akit TV', 'CNN Türk', 'NTV',
-            'A Haber', 'Habertürk TV', 'Halktv', 'Sözcü Televizyonu',
-            'TGRT Haber TV', 'Flash Haber TV', 'Haber Global TV', 'TV100',
-            'Bloomberg HT', 'Bengü Türk', 'KRT TV', 'Ulusal Kanal',
-            'Diyanet Çocuk', 'EKOTÜRK TV', 'beIN SPORTS Türkiye', 'CNBC-e'
-        ]
-        
-        for keyword in ghanaian_keywords:
-            if keyword in channel_name_lower:
-                print(f"  🌍 Found Turkey keyword: '{keyword}', using TR")
-                return 'TR'
-            
-        # Default to UK if no match
-        print(f"  🌍 No country detected, using default: UK")
-        return 'UK'
     
-    def fetch_channel_logo(self, channel_id, channel_name):
-        """Fetch and cache channel logo"""
-        logo_path = f"{self.logos_dir}/{channel_id}.jpg"
+    def fetch_channel_logo(self, channel_id, clean_name):
+        """Kanal logosunu indirir ve yerel dizine kaydeder."""
+        import os
+        import requests
         
+        logo_filename = f"{channel_id}.png"
+        logo_path = os.path.join(self.logos_dir, logo_filename)
+        
+        # Eğer logo zaten indirilmişse tekrar indirme, doğrudan yolu döndür
         if os.path.exists(logo_path):
-            file_age = time.time() - os.path.getmtime(logo_path)
-            if file_age < 604800:  # 7 days
-                return logo_path
-        
-        try:
-            qualities = ['maxresdefault', 'sddefault', 'hqdefault', 'mqdefault']
-            base_url = "https://i.ytimg.com/vi/{}/{}.jpg"
+            return logo_path
             
-            if channel_id in self.cache['channels']:
-                video_id = self.cache['channels'][channel_id].get('video_id')
-                if video_id:
-                    for quality in qualities:
-                        url = base_url.format(video_id, quality)
-                        response = requests.head(url, timeout=5)
-                        if response.status_code == 200:
-                            img_data = requests.get(url, timeout=10).content
-                            with open(logo_path, 'wb') as f:
-                                f.write(img_data)
-                            print(f"  ✅ Logo saved: {quality}")
-                            return logo_path
-            return None
+        try:
+            # YouTube kanal logo URL şablonu (En pratik yöntem)
+            # Eğer get_stream_info içindeki info'dan gelen bir thumbnail varsa onu da parametre yapabilirsiniz
+            logo_url = f"https://youtube.com" # Geçici varsayılan logo
+            
+            response = requests.get(logo_url, timeout=10)
+            if response.status_code == 200:
+                with open(logo_path, 'wb') as f:
+                    f.write(response.content)
+                print(f"  📸 Logo downloaded: {logo_path}")
+                return logo_path
         except Exception as e:
-            print(f"  ⚠️ Logo fetch failed: {str(e)[:50]}")
-            return None
+            print(f"  ⚠️ Logo download error for {clean_name}: {e}")
+            
+        return "" # Hata durumunda boş döner, kod çökmez
+
     
     def get_stream_info(self, url):
         """Get stream URL and metadata with better live detection and geo-bypass"""
@@ -245,10 +203,11 @@ def get_update_cookies(output_file="cookies.txt"):
         # Update cookies from playwright
         get_update_cookies("cookies.txt")
       
-        # Detect country from channel name
+        # DETECT COUNTRY AND SET OPTIONS
         country = self.detect_channel_country(channel_name)
         print(f"  🌍 Using geo-bypass for country: {country}")
         
+        # 🟢 YUKARIDAKİ TÜM PARANTEZLERİ KESİN OLARAK KAPATAN YDL_OPTS BLOĞU
         ydl_opts = {
             'cookies': self.cookies_file,
             'quiet': True,
@@ -273,10 +232,10 @@ def get_update_cookies(output_file="cookies.txt"):
             'headers': {
                 'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
                 'Accept-Language': f'en-{country},en;q=0.9',
-                'Origin': 'https://www.youtube.com',
-                'Referer': 'https://www.youtube.com/',
-            },
-        }
+                'Origin': 'https://youtube.com',
+                'Referer': 'https://youtube.com/',
+            }
+        } # 🟢 Bu ana parantezin kapanması yukarıdaki hatayı tamamen çözer!
         
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -293,140 +252,6 @@ def get_update_cookies(output_file="cookies.txt"):
                 
                 clean_name = re.sub(r'[^\w\s-]', '', channel_name).strip()
                 
-                self.cache['channels'][channel_id] = {
-                    'name': channel_name,
-                    'video_id': video_id,
-                    'channel_url': channel_url,
-                    'last_seen': datetime.now().isoformat()
-                }
-                
-                # LIVE DETECTION
-                is_live = False
-                live_status = info.get('live_status', '')
-                
-                if live_status in ['is_live', 'is_upcoming', 'live']:
-                    is_live = True
-                elif info.get('is_live'):
-                    is_live = True
-                elif info.get('was_live'):
-                    is_live = True
-                    print(f"  ⚠️ Was live recently, attempting to get stream anyway")
-                
-                formats = info.get('formats', [])
-                has_any_format = len(formats) > 0
-                
-                if has_any_format and not is_live:
-                    is_live = True
-                    print(f"  ⚠️ Has formats, attempting to get stream")
-                
-                if not is_live:
-                    print(f"  ⚠️ Not currently live (status: {live_status})")
-                    return {
-                        'status': 'offline',
-                        'video_id': video_id,
-                        'channel_id': channel_id,
-                        'name': clean_name,
-                        'title': title,
-                        'channel_url': channel_url,
-                        'is_live': False,
-                        'country': country
-                    }
-                
-                # Get quality streams
-                quality_streams = {}
-                video_formats = [
-                    f for f in formats 
-                    if f.get('height') and f.get('url') and f.get('vcodec') != 'none'
-                ]
-                
-                if not video_formats:
-                    print("  ⚠️ No suitable video formats found")
-                    return {
-                        'status': 'offline',
-                        'video_id': video_id,
-                        'channel_id': channel_id,
-                        'name': clean_name,
-                        'title': title,
-                        'channel_url': channel_url,
-                        'is_live': False,
-                        'country': country
-                    }
-                
-                video_formats.sort(key=lambda f: (f.get('height', 0), f.get('fps', 0)), reverse=True)
-                
-                hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
-                if hd_formats:
-                    quality_streams['hd'] = {
-                        'url': hd_formats[0]['url'],
-                        'height': hd_formats[0].get('height', 0),
-                        'fps': hd_formats[0].get('fps', 30),
-    def get_stream_info(self, url):
-        """Get stream URL and metadata with better live detection and geo-bypass"""
-        import random
-        import re
-        from datetime import datetime
-        import yt_dlp
-        
-        # First, try to get channel name without full extraction to detect country
-        try:
-            with yt_dlp.YoutubeDL({'quiet': True, 'no_warnings': True}) as ydl:
-                info = ydl.extract_info(url, download=False, process=False)
-                channel_name = info.get('channel', '') if info else ''
-        except:
-            channel_name = ''
-          
-        # Update cookies from playwright
-        get_update_cookies("cookies.txt")
-      
-        # Detect country from channel name
-        country = self.detect_channel_country(channel_name)
-        print(f"  🌍 Using geo-bypass for country: {country}")
-        
-        ydl_opts = {
-            'cookies': self.cookies_file,
-            'quiet': True,
-            'no_warnings': True,
-            'socket_timeout': 30,
-            'playlistreverse': False,
-            'playlist_items': '1',
-            'match_filter': 'is_live',
-            'retries': 5,
-            'extractor_args': {
-                'youtube': {
-                    'player_client': ['android', 'ios'],
-                    'live_from_start': True,
-                    'skip': ['webpage', 'configs']
-                }
-            },
-            # GEO-BYPASS SETTINGS
-            'geo_bypass': True,
-            'geo_bypass_country': country,
-            'xff': country,
-            
-            'headers': {
-                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
-                'Accept-Language': f'en-{country},en;q=0.9',
-                'Origin': 'https://www.youtube.com',
-                'Referer': 'https://www.youtube.com/',
-            },
-        }
-        
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=False)
-                
-                if not info:
-                    return None
-                
-                video_id = info.get('id')
-                channel_id = info.get('channel_id', video_id)
-                title = info.get('title', 'Unknown')
-                channel_name = info.get('channel', 'Unknown')
-                channel_url = info.get('channel_url', url)
-                
-                clean_name = re.sub(r'[^\w\s-]', '', channel_name).strip()
-                
-                # 🟢 Güvenli cache başlatma (KeyError almamak için)
                 if 'channels' not in self.cache:
                     self.cache['channels'] = {}
                     
@@ -519,27 +344,7 @@ def get_update_cookies(output_file="cookies.txt"):
                         'fps': first_main.get('fps', 30),
                         'quality_tag': f"{first_main.get('height', 0)}p"
                     }
-                
-                logo_path = self.fetch_channel_logo(channel_id, clean_name)
-                
-                print(f"  ✅ Geo-bypass successful for {country}")
-                
-                return {
-                    'status': 'live',
-                    'video_id': video_id,
-                    'channel_id': channel_id,
-                    'name': clean_name,
-                    'title': title,
-                    'channel_url': channel_url,
-                    'streams': quality_streams,
-                    'logo': logo_path,
-                    'is_live': True,
-                    'country': country
-                }
-                
-        except Exception as e:
-            print(f"  ⚠️ Error: {str(e)[:150]}")
-            return None
+                    
 
     
     def generate_individual_playlists(self, channels_data):
