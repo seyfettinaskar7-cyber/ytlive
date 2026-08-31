@@ -753,88 +753,78 @@ class YouTubePlaylistGenerator:
 
 
 def main():
-    try:  # 🟢 En baştaki eksik olan try bloğu eklendi
-        if not os.path.exists("streams.txt"):
+    import os
+    import time
+    from concurrent.futures import ThreadPoolExecutor, as_completed # 🟢 Paralel kütüphaneler
+    
+    try:
+        if not os.path.exists('streams.txt'):
             print("❌ streams.txt not found")
             return
-
-        with open("streams.txt", "r") as f:
-            lines = [l.strip() for l in f if l.strip() and not l.startswith("#")]
-
+        
+        with open('streams.txt', 'r') as f:
+            lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
+        
         if not lines:
             print("⚠️ No streams found")
             return
-
-        print(f"📡 Processing {len(lines)} channels...")
-        print(f"🌍 Geo-bypass enabled for multiple countries (NG, GH, US, etc.)")
-
+        
+        print(f"📡 Processing {len(lines)} channels simultaneously using Thread Pool...")
+        
         generator = YouTubePlaylistGenerator()
-
         channels_data = []
-        for i, url in enumerate(lines, 1):
-            print(f"\n📺 [{i}/{len(lines)}] Processing: {url}")
-            time.sleep(random.uniform(2, 5))
-
-            channel_info = generator.get_stream_info(url)
-            if channel_info:
-                channels_data.append(channel_info)
-
-                if channel_info.get("status") == "live":
-                    streams = list(channel_info.get("streams", {}).keys())
-                    country = channel_info.get("country", "Unknown")
-                    print(f"  ✅ LIVE ({country}) - Qualities: {', '.join(streams)}")
-                else:
-                    print(f"  ⚠️ {channel_info.get('status', 'UNKNOWN').upper()}")
-
+        
+        # 🟢 THREAD POOL BAŞLATILIYOR (Aynı anda en fazla 4 kanalı paralel sorgular)
+        # Çok yüksek yapmayın (Örn: 20 yaparsanız) YouTube IP'yi anında tamamen bloklayabilir. 4-5 idealdir.
+        max_workers = 4 
+        
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Tüm işleri havuz hafızasına yüklüyoruz
+            future_to_url = {executor.submit(generator.get_stream_info, url): url for url in lines}
+            
+            # İşler tamamlandıkça (as_completed) sonuçları topluyoruz
+            for index, future in enumerate(as_completed(future_to_url), 1):
+                url = future_to_url[future]
+                try:
+                    channel_info = future.result()
+                    if channel_info:
+                        channels_data.append(channel_info)
+                        
+                        if channel_info.get('status') == 'live':
+                            streams = list(channel_info.get('streams', {}).keys())
+                            country = channel_info.get('country', 'Unknown')
+                            print(f"  [{index}/{len(lines)}] ✅ LIVE ({country}) -> {channel_info.get('name')} (Qualities: {', '.join(streams)})")
+                        else:
+                            print(f"  [{index}/{len(lines)}] ⚠️ OFFLINE -> {url}")
+                except Exception as exc:
+                    print(f"  ❌ URL {url} generated an exception: {exc}")
+        
+        # Paralel tarama bitti, IPTV çıktılarımızı üretiyoruz
         print("\n📋 Generating EPG...")
         generator.generate_epg(channels_data)
-
+        
         print("\n🎬 Generating playlists...")
         stats, playlists = generator.generate_playlists(channels_data)
-
+        
         print("\n📺 Generating individual channel playlists...")
         individual_channels = generator.generate_individual_playlists(channels_data)
-
+        
         generator.save_cache()
-
+        
         print(f"\n{'='*50}")
-        print(f"📊 FINAL STATISTICS:")
+        print(f"📊 PARALLEL RUN FINAL STATISTICS:")
         print(f"   Live: {stats['live']}/{stats['total']}")
         print(f"   Offline: {stats['offline']}")
         print(f"   Errors: {stats['error']}")
-        print(f"\n📊 Quality Distribution:")
-        for quality, count in stats["qualities"].items():
-            if count > 0:
-                print(f"   {quality}: {count}")
-        print(f"\n📊 Categories:")
-        for category, count in stats["by_category"].items():
-            print(f"   {category}: {count}")
-        print(f"\n📊 Countries:")
-        for country, count in stats["by_country"].items():
-            print(f"   {country}: {count}")
-        print(f"\n📁 Generated Files:")
-        print("   - streams.m3u8 (Main playlist)")
-        print("   - streams_hd.m3u8 (HD only)")
-        print("   - streams_mobile.m3u8 (Mobile quality)")
-        print("   - streams_audio.m3u8 (Audio only)")
-        print("   - epg.xml (TV Guide)")
-        print("   - stats.json (Detailed statistics)")
-        print(
-            f"   - channels/ (Individual channel files - {len(individual_channels) if individual_channels else 0} files)"
-        )
-        print(f"\n🌐 Individual Channels URL:")
-        print(f"   https://uticap.github.io/Youtube-to-M3u8/channels/")
         print(f"{'='*50}")
 
     except Exception as e:
         import traceback
-
-        print("\n" + "=" * 50)
+        print("\n" + "="*50)
         print("🚨 CRITICAL ERROR CAUGHT IN MAIN:")
         print(traceback.format_exc())
-        print("=" * 50 + "\n")
+        print("="*50 + "\n")
         raise e
-
-
+        
 if __name__ == "__main__":
     main()
