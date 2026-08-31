@@ -38,16 +38,22 @@ jobs:
       - name: Setup Cloudflare WARP
         continue-on-error: true
         run: |
+          # 1. Cloudflare resmi paket anahtarını ve deposunu sisteme ekliyoruz
+          curl -fsSL https://cloudflareclient.com | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://cloudflareclient.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-warp.list
+          
+          # 2. Güncel paket listesini çekip resmi warp-cli istemcisini kuruyoruz
           sudo apt-get update -qq
-          sudo apt-get install -y -qq wireguard-tools iptables
-          curl -fsSL https://github.com -o wgcf
-          chmod +x wgcf
-          sudo mv wgcf /usr/local/bin/
-          wgcf register --accept-tos
-          wgcf generate
-          sudo mkdir -p /etc/wireguard
-          sudo cp wgcf-profile.conf /etc/wireguard/wgcf.conf
-          sudo wg-quick up /etc/wireguard/wgcf.conf || true
+          sudo apt-get install -y -qq cloudflare-warp
+          
+          # 3. WARP servisini arkada ayağa kaldırıp yeni bir cihaz kaydı açıyoruz
+          warp-cli --accept-tos registration new
+          warp-cli --accept-tos mode warp
+          warp-cli --accept-tos connect
+          
+          # 4. VPN devresinin aktif olup olmadığını doğrulamak için yeni IP'yi ekrana yazdırıyoruz
+          echo "🌐 Cloudflare WARP tüneli aktif! Yeni Sunucu IP Adresiniz:"
+          curl -s https://ifconfig.me
 
       - name: Create directories
         run: |
