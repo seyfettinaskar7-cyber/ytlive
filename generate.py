@@ -188,6 +188,8 @@ def get_update_cookies(output_file="cookies.txt"):
             
         return "" # Hata durumunda boş döner, kod çökmez
 
+
+
     
     def get_stream_info(self, url):
         """Get stream URL and metadata with better live detection and geo-bypass"""
