@@ -161,53 +161,65 @@ class YouTubePlaylistGenerator:
         from datetime import datetime
         import yt_dlp
         from fake_useragent import UserAgent
-        
+
         # 🟢 Her istek için sıfır, popüler ve gerçekçi bir User-Agent üretiyoruz
         try:
-            ua = UserAgent(browsers=['chrome', 'edge'], os=['windows', 'macos'])
+            ua = UserAgent(browsers=["chrome", "edge"], os=["windows", "macos"])
             random_ua = ua.random
         except:
             random_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-        
+
         url_lower = url.lower()
-        if any(x in url_lower for x in ['trt', 'atv', 'kanald', 'show', 'now', 'tv8', 'haber', 'turk', 'akit', 'ulke', 'szc', 'halk']):
-            country = 'TR'
+        if any(
+            x in url_lower
+            for x in [
+                "trt",
+                "atv",
+                "kanald",
+                "show",
+                "now",
+                "tv8",
+                "haber",
+                "turk",
+                "akit",
+                "ulke",
+                "szc",
+                "halk",
+            ]
+        ):
+            country = "TR"
         else:
-            country = 'US'
-            
+            country = "US"
+
         print(f"  🌍 Using geo-bypass for country: {country}")
-        
+
         ydl_opts = {
-            'cookies': self.cookies_file,
-            'quiet': True,
-            'no_warnings': True,
-            'socket_timeout': 30,
-            'playlistreverse': False,
-            'playlist_items': '1',
-            'match_filter': 'is_live',
-            'retries': 5,
-            
-            'extractor_args': {
-                'youtube': {
-                    'player_client': ['web_embedded', 'ios_embedded'],
-                    'player_skip': ['webpage', 'configs'],
-                    'live_from_start': True
+            "cookies": self.cookies_file,
+            "quiet": True,
+            "no_warnings": True,
+            "socket_timeout": 30,
+            "playlistreverse": False,
+            "playlist_items": "1",
+            "match_filter": "is_live",
+            "retries": 5,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["web_embedded", "ios_embedded"],
+                    "player_skip": ["webpage", "configs"],
+                    "live_from_start": True,
                 }
             },
-            
-            'geo_bypass': True,
-            'geo_bypass_country': country,
-            'xff': country,
-            
-            'headers': {
-                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
-                'Accept-Language': f'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Origin': 'https://www.youtube.com',
-                'Referer': 'https://www.youtube.com/',
-                'User-Agent': random_ua # 🟢 Üretilen dinamik sahte user-agent başlığa ekleniyor
-            }
+            "geo_bypass": True,
+            "geo_bypass_country": country,
+            "xff": country,
+            "headers": {
+                "X-Forwarded-For": f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}",
+                "Accept-Language": f"tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Origin": "https://www.youtube.com",
+                "Referer": "https://www.youtube.com/",
+                "User-Agent": random_ua,  # 🟢 Üretilen dinamik sahte user-agent başlığa ekleniyor
+            },
         }
-
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -755,33 +767,40 @@ class YouTubePlaylistGenerator:
 def main():
     import os
     import time
-    from concurrent.futures import ThreadPoolExecutor, as_completed # 🟢 Paralel kütüphaneler
-    
+    from concurrent.futures import (
+        ThreadPoolExecutor,
+        as_completed,
+    )  # 🟢 Paralel kütüphaneler
+
     try:
-        if not os.path.exists('streams.txt'):
+        if not os.path.exists("streams.txt"):
             print("❌ streams.txt not found")
             return
-        
-        with open('streams.txt', 'r') as f:
-            lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
-        
+
+        with open("streams.txt", "r") as f:
+            lines = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+
         if not lines:
             print("⚠️ No streams found")
             return
-        
-        print(f"📡 Processing {len(lines)} channels simultaneously using Thread Pool...")
-        
+
+        print(
+            f"📡 Processing {len(lines)} channels simultaneously using Thread Pool..."
+        )
+
         generator = YouTubePlaylistGenerator()
         channels_data = []
-        
+
         # 🟢 THREAD POOL BAŞLATILIYOR (Aynı anda en fazla 4 kanalı paralel sorgular)
         # Çok yüksek yapmayın (Örn: 20 yaparsanız) YouTube IP'yi anında tamamen bloklayabilir. 4-5 idealdir.
-        max_workers = 4 
-        
+        max_workers = 4
+
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Tüm işleri havuz hafızasına yüklüyoruz
-            future_to_url = {executor.submit(generator.get_stream_info, url): url for url in lines}
-            
+            future_to_url = {
+                executor.submit(generator.get_stream_info, url): url for url in lines
+            }
+
             # İşler tamamlandıkça (as_completed) sonuçları topluyoruz
             for index, future in enumerate(as_completed(future_to_url), 1):
                 url = future_to_url[future]
@@ -789,28 +808,30 @@ def main():
                     channel_info = future.result()
                     if channel_info:
                         channels_data.append(channel_info)
-                        
-                        if channel_info.get('status') == 'live':
-                            streams = list(channel_info.get('streams', {}).keys())
-                            country = channel_info.get('country', 'Unknown')
-                            print(f"  [{index}/{len(lines)}] ✅ LIVE ({country}) -> {channel_info.get('name')} (Qualities: {', '.join(streams)})")
+
+                        if channel_info.get("status") == "live":
+                            streams = list(channel_info.get("streams", {}).keys())
+                            country = channel_info.get("country", "Unknown")
+                            print(
+                                f"  [{index}/{len(lines)}] ✅ LIVE ({country}) -> {channel_info.get('name')} (Qualities: {', '.join(streams)})"
+                            )
                         else:
                             print(f"  [{index}/{len(lines)}] ⚠️ OFFLINE -> {url}")
                 except Exception as exc:
                     print(f"  ❌ URL {url} generated an exception: {exc}")
-        
+
         # Paralel tarama bitti, IPTV çıktılarımızı üretiyoruz
         print("\n📋 Generating EPG...")
         generator.generate_epg(channels_data)
-        
+
         print("\n🎬 Generating playlists...")
         stats, playlists = generator.generate_playlists(channels_data)
-        
+
         print("\n📺 Generating individual channel playlists...")
         individual_channels = generator.generate_individual_playlists(channels_data)
-        
+
         generator.save_cache()
-        
+
         print(f"\n{'='*50}")
         print(f"📊 PARALLEL RUN FINAL STATISTICS:")
         print(f"   Live: {stats['live']}/{stats['total']}")
@@ -820,11 +841,13 @@ def main():
 
     except Exception as e:
         import traceback
-        print("\n" + "="*50)
+
+        print("\n" + "=" * 50)
         print("🚨 CRITICAL ERROR CAUGHT IN MAIN:")
         print(traceback.format_exc())
-        print("="*50 + "\n")
+        print("=" * 50 + "\n")
         raise e
-        
+
+
 if __name__ == "__main__":
     main()
