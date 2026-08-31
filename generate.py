@@ -173,34 +173,32 @@ class YouTubePlaylistGenerator:
         print(f"  🌍 Using geo-bypass for country: {country}")
 
         ydl_opts = {
-            'cookies': self.cookies_file,
-            'quiet': True,
-            'no_warnings': True,
-            'socket_timeout': 30,
-            'playlistreverse': False,
-            'playlist_items': '1',
-            'match_filter': 'is_live',
-            'retries': 5,
-            'extractor_args': {
-                'youtube': {
+            "cookies": self.cookies_file,
+            "quiet": True,
+            "no_warnings": True,
+            "socket_timeout": 30,
+            "playlistreverse": False,
+            "playlist_items": "1",
+            "match_filter": "is_live",
+            "retries": 5,
+            "extractor_args": {
+                "youtube": {
                     # Sadece doğrulama istemeyen gömülü (embed) istemcileri zorluyoruz
-                    'player_client': ['web_embedded', 'ios_embedded'],
-                    'player_skip': ['webpage', 'configs'],
-                    'live_from_start': True
+                    "player_client": ["web_embedded", "ios_embedded"],
+                    "player_skip": ["webpage", "configs"],
+                    "live_from_start": True,
                 }
             },
-            
-            'geo_bypass': True,
-            'geo_bypass_country': country,
-            'xff': country,
-            'headers': {
-                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
-                'Accept-Language': f'en-{country},en;q=0.9',
-                'Origin': 'https://www.youtube.com',
-                'Referer': 'https://www.youtube.com/',
-            }
+            "geo_bypass": True,
+            "geo_bypass_country": country,
+            "xff": country,
+            "headers": {
+                "X-Forwarded-For": f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}",
+                "Accept-Language": f"en-{country},en;q=0.9",
+                "Origin": "https://www.youtube.com",
+                "Referer": "https://www.youtube.com/",
+            },
         }
-
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
