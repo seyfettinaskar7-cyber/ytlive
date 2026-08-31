@@ -155,50 +155,59 @@ class YouTubePlaylistGenerator:
 
     # 🟢 EKSİK METOT 3: Akış Bilgilerini Çeken Ana Fonksiyon
     def get_stream_info(self, url):
-        """Get stream URL and metadata with better live detection and geo-bypass"""
+        """Get stream URL and metadata with fake user-agent rotation and embed bypass"""
         import random
         import re
         from datetime import datetime
         import yt_dlp
-
+        from fake_useragent import UserAgent
+        
+        # 🟢 Her istek için sıfır, popüler ve gerçekçi bir User-Agent üretiyoruz
         try:
-            with yt_dlp.YoutubeDL({"quiet": True, "no_warnings": True}) as ydl:
-                info = ydl.extract_info(url, download=False, process=False)
-                channel_name = info.get("channel", "") if info else ""
+            ua = UserAgent(browsers=['chrome', 'edge'], os=['windows', 'macos'])
+            random_ua = ua.random
         except:
-            channel_name = ""
-
-        get_update_cookies("cookies.txt")
-        country = self.detect_channel_country(channel_name)
+            random_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        
+        url_lower = url.lower()
+        if any(x in url_lower for x in ['trt', 'atv', 'kanald', 'show', 'now', 'tv8', 'haber', 'turk', 'akit', 'ulke', 'szc', 'halk']):
+            country = 'TR'
+        else:
+            country = 'US'
+            
         print(f"  🌍 Using geo-bypass for country: {country}")
-
+        
         ydl_opts = {
-            "cookies": self.cookies_file,
-            "quiet": True,
-            "no_warnings": True,
-            "socket_timeout": 30,
-            "playlistreverse": False,
-            "playlist_items": "1",
-            "match_filter": "is_live",
-            "retries": 5,
-            "extractor_args": {
-                "youtube": {
-                    # Sadece doğrulama istemeyen gömülü (embed) istemcileri zorluyoruz
-                    "player_client": ["web_embedded", "ios_embedded"],
-                    "player_skip": ["webpage", "configs"],
-                    "live_from_start": True,
+            'cookies': self.cookies_file,
+            'quiet': True,
+            'no_warnings': True,
+            'socket_timeout': 30,
+            'playlistreverse': False,
+            'playlist_items': '1',
+            'match_filter': 'is_live',
+            'retries': 5,
+            
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['web_embedded', 'ios_embedded'],
+                    'player_skip': ['webpage', 'configs'],
+                    'live_from_start': True
                 }
             },
-            "geo_bypass": True,
-            "geo_bypass_country": country,
-            "xff": country,
-            "headers": {
-                "X-Forwarded-For": f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}",
-                "Accept-Language": f"en-{country},en;q=0.9",
-                "Origin": "https://www.youtube.com",
-                "Referer": "https://www.youtube.com/",
-            },
+            
+            'geo_bypass': True,
+            'geo_bypass_country': country,
+            'xff': country,
+            
+            'headers': {
+                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
+                'Accept-Language': f'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Origin': 'https://www.youtube.com',
+                'Referer': 'https://www.youtube.com/',
+                'User-Agent': random_ua # 🟢 Üretilen dinamik sahte user-agent başlığa ekleniyor
+            }
         }
+
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
