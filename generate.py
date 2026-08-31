@@ -360,6 +360,143 @@ def get_update_cookies(output_file="cookies.txt"):
                         'url': hd_formats[0]['url'],
                         'height': hd_formats[0].get('height', 0),
                         'fps': hd_formats[0].get('fps', 30),
+    def get_stream_info(self, url):
+        """Get stream URL and metadata with better live detection and geo-bypass"""
+        import random
+        import re
+        from datetime import datetime
+        import yt_dlp
+        
+        # First, try to get channel name without full extraction to detect country
+        try:
+            with yt_dlp.YoutubeDL({'quiet': True, 'no_warnings': True}) as ydl:
+                info = ydl.extract_info(url, download=False, process=False)
+                channel_name = info.get('channel', '') if info else ''
+        except:
+            channel_name = ''
+          
+        # Update cookies from playwright
+        get_update_cookies("cookies.txt")
+      
+        # Detect country from channel name
+        country = self.detect_channel_country(channel_name)
+        print(f"  🌍 Using geo-bypass for country: {country}")
+        
+        ydl_opts = {
+            'cookies': self.cookies_file,
+            'quiet': True,
+            'no_warnings': True,
+            'socket_timeout': 30,
+            'playlistreverse': False,
+            'playlist_items': '1',
+            'match_filter': 'is_live',
+            'retries': 5,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'ios'],
+                    'live_from_start': True,
+                    'skip': ['webpage', 'configs']
+                }
+            },
+            # GEO-BYPASS SETTINGS
+            'geo_bypass': True,
+            'geo_bypass_country': country,
+            'xff': country,
+            
+            'headers': {
+                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
+                'Accept-Language': f'en-{country},en;q=0.9',
+                'Origin': 'https://www.youtube.com',
+                'Referer': 'https://www.youtube.com/',
+            },
+        }
+        
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(url, download=False)
+                
+                if not info:
+                    return None
+                
+                video_id = info.get('id')
+                channel_id = info.get('channel_id', video_id)
+                title = info.get('title', 'Unknown')
+                channel_name = info.get('channel', 'Unknown')
+                channel_url = info.get('channel_url', url)
+                
+                clean_name = re.sub(r'[^\w\s-]', '', channel_name).strip()
+                
+                # 🟢 Güvenli cache başlatma (KeyError almamak için)
+                if 'channels' not in self.cache:
+                    self.cache['channels'] = {}
+                    
+                self.cache['channels'][channel_id] = {
+                    'name': channel_name,
+                    'video_id': video_id,
+                    'channel_url': channel_url,
+                    'last_seen': datetime.now().isoformat()
+                }
+                
+                # LIVE DETECTION
+                is_live = False
+                live_status = info.get('live_status', '')
+                
+                if live_status in ['is_live', 'is_upcoming', 'live']:
+                    is_live = True
+                elif info.get('is_live'):
+                    is_live = True
+                elif info.get('was_live'):
+                    is_live = True
+                    print(f"  ⚠️ Was live recently, attempting to get stream anyway")
+                
+                formats = info.get('formats', [])
+                has_any_format = len(formats) > 0
+                
+                if has_any_format and not is_live:
+                    is_live = True
+                    print(f"  ⚠️ Has formats, attempting to get stream")
+                
+                if not is_live:
+                    print(f"  ⚠️ Not currently live (status: {live_status})")
+                    return {
+                        'status': 'offline',
+                        'video_id': video_id,
+                        'channel_id': channel_id,
+                        'name': clean_name,
+                        'title': title,
+                        'channel_url': channel_url,
+                        'is_live': False,
+                        'country': country
+                    }
+                
+                # Get quality streams
+                quality_streams = {}
+                video_formats = [
+                    f for f in formats 
+                    if f.get('height') and f.get('url') and f.get('vcodec') != 'none'
+                ]
+                
+                if not video_formats:
+                    print("  ⚠️ No suitable video formats found")
+                    return {
+                        'status': 'offline',
+                        'video_id': video_id,
+                        'channel_id': channel_id,
+                        'name': clean_name,
+                        'title': title,
+                        'channel_url': channel_url,
+                        'is_live': False,
+                        'country': country
+                    }
+                
+                video_formats.sort(key=lambda f: (f.get('height', 0), f.get('fps', 0)), reverse=True)
+                
+                hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
+                if hd_formats:
+                    quality_streams['hd'] = {
+                        'url': hd_formats[0]['url'],
+                        'height': hd_formats[0].get('height', 0),
+                        'fps': hd_formats[0].get('fps', 30),
                         'quality_tag': f"{hd_formats[0].get('height', 0)}p"
                     }
                 
@@ -400,6 +537,7 @@ def get_update_cookies(output_file="cookies.txt"):
         except Exception as e:
             print(f"  ⚠️ Error: {str(e)[:150]}")
             return None
+
     
     def generate_individual_playlists(self, channels_data):
         """Generate individual M3U8 files for each channel with validation and preserve previous channels"""
