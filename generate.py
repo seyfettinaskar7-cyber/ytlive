@@ -494,7 +494,7 @@ def get_update_cookies(output_file="cookies.txt"):
                 hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
                 if hd_formats:
                     quality_streams['hd'] = {
-                        'url': hd_formats[0]['url'], # 🟢 [0] indeksi eklendi
+                        'url': hd_formats[0]['url'],
                         'height': hd_formats[0].get('height', 0),
                         'fps': hd_formats[0].get('fps', 30),
                         'quality_tag': f"{hd_formats[0].get('height', 0)}p"
@@ -503,7 +503,7 @@ def get_update_cookies(output_file="cookies.txt"):
                 mobile_formats = [f for f in video_formats if f.get('height', 0) <= 480]
                 if mobile_formats:
                     quality_streams['mobile'] = {
-                        'url': mobile_formats[0]['url'], # 🟢 [0] indeksi eklendi
+                        'url': mobile_formats[0]['url'],
                         'height': mobile_formats[0].get('height', 0),
                         'fps': mobile_formats[0].get('fps', 30),
                         'quality_tag': f"{mobile_formats[0].get('height', 0)}p"
@@ -511,7 +511,7 @@ def get_update_cookies(output_file="cookies.txt"):
                 
                 if not quality_streams and video_formats:
                     quality_streams['main'] = {
-                        'url': video_formats[0]['url'], # 🟢 [0] indeksi eklendi
+                        'url': video_formats[0]['url'],
                         'height': video_formats[0].get('height', 0),
                         'fps': video_formats[0].get('fps', 30),
                         'quality_tag': f"{video_formats[0].get('height', 0)}p"
