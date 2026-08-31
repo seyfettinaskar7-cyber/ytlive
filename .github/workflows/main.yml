@@ -31,7 +31,7 @@ jobs:
 
       - name: Setup Python & dependencies
         run: |
-          pip install --upgrade pip yt-dlp requests playwright
+          pip install --upgrade pip yt-dlp requests playwright black
           playwright install chromium
           echo "yt-dlp: $(yt-dlp --version)"
 
@@ -40,7 +40,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq wireguard-tools iptables
-          curl -fsSL https://github.com/ViRb3/wgcf/releases/download/v2.2.22/wgcf_2.2.22_linux_amd64 -o wgcf
+          curl -fsSL https://github.com -o wgcf
           chmod +x wgcf
           sudo mv wgcf /usr/local/bin/
           wgcf register --accept-tos
@@ -54,6 +54,11 @@ jobs:
           mkdir -p logos channels
           touch logos/.gitkeep channels/.gitkeep
 
+      # 🟢 BLACK İLE OTOMATİK KOD DÜZELTME ADIMI
+      - name: Auto-format Python code with Black
+        run: |
+          black generate.py
+
       - name: Run playlist generator
         run: |
           echo "Starting generation..."
@@ -63,8 +68,10 @@ jobs:
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@://github.com"
 
+          # 🟢 Black'in düzelttiği generate.py dosyasını da repoya geri kaydediyoruz
+          git add generate.py
           git add streams*.m3u8 epg.xml stats.json logos/ channels/ 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -72,7 +79,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Update playlist - $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git commit -m "Update playlist & Auto-format code - $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
 
       - name: Cleanup sensitive files
