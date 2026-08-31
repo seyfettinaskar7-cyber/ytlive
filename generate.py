@@ -345,8 +345,11 @@ def get_update_cookies(output_file="cookies.txt"):
                         'quality_tag': f"{first_main.get('height', 0)}p"
                     }
                     
-
-    
+        # 🟢 EKSİK OLAN HATA YAKALAMA BLOĞU (Bunu ekleyin)
+        except Exception as e:
+            print(f"  ⚠️ Error in get_stream_info: {str(e)[:150]}")
+            return None
+            
     def generate_individual_playlists(self, channels_data):
         """Generate individual M3U8 files for each channel with validation and preserve previous channels"""
         individual_channels = []
