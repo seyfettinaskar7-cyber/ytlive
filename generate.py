@@ -1083,5 +1083,13 @@ def main():
     print(f"   https://uticap.github.io/Youtube-to-M3u8/channels/")
     print(f"{'='*50}")
 
+    except Exception as e:
+        import traceback
+        print("\n" + "="*50)
+        print("🚨 CRITICAL ERROR CAUGHT IN MAIN:")
+        print(traceback.format_exc())
+        print("="*50 + "\n")
+        raise e
+        
 if __name__ == "__main__":
     main()
