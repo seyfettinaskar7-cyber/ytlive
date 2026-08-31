@@ -493,28 +493,31 @@ def get_update_cookies(output_file="cookies.txt"):
                 
                 hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
                 if hd_formats:
+                    first_hd = hd_formats[0]
                     quality_streams['hd'] = {
-                        'url': hd_formats[0]['url'],
-                        'height': hd_formats[0].get('height', 0),
-                        'fps': hd_formats[0].get('fps', 30),
-                        'quality_tag': f"{hd_formats[0].get('height', 0)}p"
+                        'url': first_hd.get('url'),
+                        'height': first_hd.get('height', 0),
+                        'fps': first_hd.get('fps', 30),
+                        'quality_tag': f"{first_hd.get('height', 0)}p"
                     }
                 
                 mobile_formats = [f for f in video_formats if f.get('height', 0) <= 480]
                 if mobile_formats:
+                    first_mobile = mobile_formats[0]
                     quality_streams['mobile'] = {
-                        'url': mobile_formats[0]['url'],
-                        'height': mobile_formats[0].get('height', 0),
-                        'fps': mobile_formats[0].get('fps', 30),
-                        'quality_tag': f"{mobile_formats[0].get('height', 0)}p"
+                        'url': first_mobile.get('url'),
+                        'height': first_mobile.get('height', 0),
+                        'fps': first_mobile.get('fps', 30),
+                        'quality_tag': f"{first_mobile.get('height', 0)}p"
                     }
                 
                 if not quality_streams and video_formats:
+                    first_main = video_formats[0]
                     quality_streams['main'] = {
-                        'url': video_formats[0]['url'],
-                        'height': video_formats[0].get('height', 0),
-                        'fps': video_formats[0].get('fps', 30),
-                        'quality_tag': f"{video_formats[0].get('height', 0)}p"
+                        'url': first_main.get('url'),
+                        'height': first_main.get('height', 0),
+                        'fps': first_main.get('fps', 30),
+                        'quality_tag': f"{first_main.get('height', 0)}p"
                     }
                 
                 logo_path = self.fetch_channel_logo(channel_id, clean_name)
