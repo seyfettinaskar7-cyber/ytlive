@@ -181,12 +181,11 @@ class YouTubePlaylistGenerator:
             "playlist_items": "1",
             "match_filter": "is_live",
             "retries": 5,
-            "extractor_args": {
-                "youtube": {
-                    # 🟢 Bot engelini azaltmak için en güncel stabil istemci kombinasyonları
-                    "player_client": ["ios", "android", "web_creator"],
-                    "live_from_start": True,
-                    "skip": ["webpage", "configs"],
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['mweb'],
+                    'live_from_start': True,
+                    'skip': ['webpage', 'configs']
                 }
             },
             "geo_bypass": True,
