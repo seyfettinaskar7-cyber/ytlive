@@ -194,14 +194,11 @@ class YouTubePlaylistGenerator:
         print(f"  🌍 Using geo-bypass for country: {country}")
 
         ydl_opts = {
-            "cookies": self.cookies_file,
-            "quiet": True,
-            "no_warnings": True,
-            "socket_timeout": 30,
-            "playlistreverse": False,
-            "playlist_items": "1",
-            "match_filter": "is_live",
-            "retries": 5,
+            'cookies': self.cookies_file,
+            'proxy': 'socks5://127.0.0.1:40000', # 🟢 İstekleri Cloudflare WARP üzerinden tüneller
+            'quiet': True,
+            'no_warnings': True,
+            'socket_timeout': 30,
             "extractor_args": {
                 "youtube": {
                     "player_client": ["web_embedded", "ios_embedded"],
