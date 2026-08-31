@@ -150,7 +150,8 @@ class YouTubePlaylistGenerator:
             'retries': 5,
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios'],
+                    # 🟢 Bot engelini azaltmak için en güncel stabil istemci kombinasyonları
+                    'player_client': ['ios', 'android', 'web_creator'],
                     'live_from_start': True,
                     'skip': ['webpage', 'configs']
                 }
@@ -161,8 +162,8 @@ class YouTubePlaylistGenerator:
             'headers': {
                 'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
                 'Accept-Language': f'en-{country},en;q=0.9',
-                'Origin': 'https://youtube.com',
-                'Referer': 'https://youtube.com/',
+                'Origin': 'https://www.youtube.com',
+                'Referer': 'https://www.youtube.com/',
             }
         }
         
@@ -249,6 +250,40 @@ class YouTubePlaylistGenerator:
             print(f"  ⚠️ Error: {str(e)[:150]}")
             return None
 
+    def generate_individual_playlists(self, channels_data):
+        """Her kanal için ayrı ayrı tekli M3U8 listesi oluşturur."""
+        import os
+        
+        generated_files = []
+        if not channels_data:
+            return generated_files
+            
+        for ch in channels_data:
+            if ch.get('status') != 'live' or 'streams' not in ch:
+                continue
+                
+            clean_name = ch.get('name', 'Unknown')
+            file_path = os.path.join(self.channels_dir, f"{clean_name}.m3u8")
+            
+            # Kanal için tekli m3u içeriği
+            m3u_content = f"#EXTM3U\n"
+            m3u_content += f"#EXTINF:-1 tvg-id=\"{ch.get('channel_id')}\" tvg-name=\"{ch.get('name')}\" tvg-logo=\"{ch.get('logo', '')}\", {ch.get('title')}\n"
+            
+            # Varsa HD yoksa mevcut ilk akışı seç
+            streams = ch.get('streams', {})
+            stream_url = streams.get('hd', streams.get('main', streams.get('mobile', {}))).get('url', '')
+            
+            m3u_content += f"{stream_url}\n"
+            
+            try:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(m3u_content)
+                generated_files.append({'name': ch.get('name'), 'file': file_path, 'country': ch.get('country'), 'quality': 'HD' if 'hd' in streams else 'SD', 'status': 'live'})
+            except Exception as e:
+                print(f"  ⚠️ Error writing individual playlist for {clean_name}: {e}")
+                
+        return generated_files
+            
     # 🟢 4 BOŞLUK GİRİNTİSİNE ÇEKİLMİŞ YENİ HTML FONKSİYONU
     def generate_channels_html(self, channels):
         """Generate HTML index page with channels directly embedded"""
