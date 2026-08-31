@@ -31,7 +31,7 @@ jobs:
 
       - name: Setup Python & dependencies
         run: |
-          pip install --upgrade pip yt-dlp requests playwright black
+          pip install --upgrade pip yt-dlp requests playwright black fake-useragent
           playwright install chromium
           echo "yt-dlp: $(yt-dlp --version)"
 
