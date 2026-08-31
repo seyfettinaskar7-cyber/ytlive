@@ -314,6 +314,7 @@ def get_update_cookies(output_file="cookies.txt"):
                         'country': country
                     }
                 
+                # --- KALİTE SEÇİMLERİNİN YAPILDIĞI VE DÜZGÜN KAPATILDIĞI BÖLÜM ---
                 video_formats.sort(key=lambda f: (f.get('height', 0), f.get('fps', 0)), reverse=True)
                 
                 hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
@@ -344,110 +345,29 @@ def get_update_cookies(output_file="cookies.txt"):
                         'fps': first_main.get('fps', 30),
                         'quality_tag': f"{first_main.get('height', 0)}p"
                     }
-                    
-        # 🟢 EKSİK OLAN HATA YAKALAMA BLOĞU (Bunu ekleyin)
+                
+                logo_path = self.fetch_channel_logo(channel_id, clean_name)
+                
+                print(f"  ✅ Geo-bypass successful for {country}")
+                
+                return {
+                    'status': 'live',
+                    'video_id': video_id,
+                    'channel_id': channel_id,
+                    'name': clean_name,
+                    'title': title,
+                    'channel_url': channel_url,
+                    'streams': quality_streams,
+                    'logo': logo_path,
+                    'is_live': True,
+                    'country': country
+                }
+                
         except Exception as e:
             print(f"  ⚠️ Error in get_stream_info: {str(e)[:150]}")
             return None
-            
-    def generate_individual_playlists(self, channels_data):
-        """Generate individual M3U8 files for each channel with validation and preserve previous channels"""
-        individual_channels = []
-        live_channels_found = False
-        
-        for channel in channels_data:
-            channel_name = channel.get('name', 'unknown')
-            channel_id = channel.get('channel_id', '')
-            country = channel.get('country', 'Unknown')
-            
-            safe_name = self.safe_filename(channel_name)
-            filename = f"{self.channels_dir}/{safe_name}.m3u8"
-            
-            is_live = channel.get('is_live', False) and channel.get('status') == 'live'
-            
-            if is_live:
-                live_channels_found = True
-                main_stream = channel.get('streams', {}).get('hd', {})
-                if not main_stream:
-                    for s in channel.get('streams', {}).values():
-                        main_stream = s
-                        break
-                
-                if main_stream and main_stream.get('url'):
-                    quality_tag = main_stream.get('quality_tag', '')
-                    logo_attr = f' tvg-logo="{channel["logo"]}"' if channel.get('logo') else ''
-                    
-                    expiry_time = (datetime.now() + timedelta(hours=5)).strftime('%H:%M UTC')
-                    
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(f"""#EXTM3U\n
-""")
-                        f.write(f'#EXTINF:0 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="Individual",{channel_name} [{quality_tag}] LIVE\n')
-                        f.write(f'#EXTVLCOPT:http-origin=https://www.youtube.com\n')
-                        f.write(f'#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 OPR/133.0.0.0\n')
-                        f.write(f'#EXTVLCOPT:http-reconnect=true\n')
-                        f.write(main_stream['url'] + '\n')
-                    
-                    print(f"  ✅ LIVE ({country}): {filename}")
-                    
-                    individual_channels.append({
-                        'name': channel_name,
-                        'file': filename,
-                        'id': channel_id,
-                        'quality': quality_tag,
-                        'status': 'live',
-                        'url': main_stream['url'],
-                        'country': country
-                    })
-                else:
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(f"""#EXTM3U
-#EXT-X-VERSION:3
-# Channel: {channel_name}
-# ID: {channel_id}
-# Status: STREAM UNAVAILABLE
-# Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}
 
-#EXTINF:-1 tvg-name="{channel_name}",{channel_name} [Stream Unavailable - Check YouTube]
-{channel.get('channel_url', 'https://youtube.com')}
-""")
-                    print(f"  ⚠️ UNAVAILABLE: {filename}")
-            else:
-                print(f"  ⚫ OFFLINE: {filename} (keeping existing file)")
-        
-        # If NO live channels found, try to load previous channels.json
-        if not live_channels_found:
-            print("⚠️ No live channels detected in this run")
-            try:
-                if os.path.exists(f"{self.channels_dir}/channels.json"):
-                    with open(f"{self.channels_dir}/channels.json", 'r') as f:
-                        old_data = json.load(f)
-                    if old_data.get('channels'):
-                        print(f"📋 Using {len(old_data['channels'])} channels from previous run")
-                        individual_channels = old_data['channels']
-                        
-                        for ch in individual_channels:
-                            filename = ch['file']
-                            if os.path.exists(filename):
-                                with open(filename, 'r') as f:
-                                    content = f.read()
-                                if '🔴 LIVE' in content:
-                                    with open(filename, 'w', encoding='utf-8') as f:
-                                        f.write(content.replace('🔴 LIVE', '⚫ OFFLINE'))
-            except Exception as e:
-                print(f"  ⚠️ Could not load previous channels: {e}")
-        
-        with open(f"{self.channels_dir}/channels.json", 'w') as f:
-            json.dump({
-                'generated': datetime.now().isoformat(),
-                'count': len(individual_channels),
-                'channels': individual_channels
-            }, f, indent=2)
-        
-        self.generate_channels_html(individual_channels)
-        
-        return individual_channels
-    
+    # 🟢 4 BOŞLUK GİRİNTİSİNE ÇEKİLMİŞ YENİ HTML FONKSİYONU
     def generate_channels_html(self, channels):
         """Generate HTML index page with channels directly embedded"""
         
@@ -624,7 +544,7 @@ def get_update_cookies(output_file="cookies.txt"):
             f.write(html)
         
         print(f"✅ Generated channels index with {len(channels)} channels")
-    
+
     def generate_epg(self, channels_data):
         """Generate XMLTV EPG file"""
         tv = ET.Element("tv", {
