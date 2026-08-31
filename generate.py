@@ -493,7 +493,7 @@ def get_update_cookies(output_file="cookies.txt"):
                 
                 hd_formats = [f for f in video_formats if f.get('height', 0) >= 720]
                 if len(hd_formats) > 0:
-                    first_hd = hd_formats.pop(0)
+                    first_hd = hd_formats[0]
                     quality_streams['hd'] = {
                         'url': first_hd.get('url'),
                         'height': first_hd.get('height', 0),
@@ -503,7 +503,7 @@ def get_update_cookies(output_file="cookies.txt"):
                 
                 mobile_formats = [f for f in video_formats if f.get('height', 0) <= 480]
                 if len(mobile_formats) > 0:
-                    first_mobile = mobile_formats.pop(0)
+                    first_mobile = mobile_formats[0]
                     quality_streams['mobile'] = {
                         'url': first_mobile.get('url'),
                         'height': first_mobile.get('height', 0),
@@ -512,7 +512,7 @@ def get_update_cookies(output_file="cookies.txt"):
                     }
                 
                 if not quality_streams and len(video_formats) > 0:
-                    first_main = video_formats.pop(0)
+                    first_main = video_formats[0]
                     quality_streams['main'] = {
                         'url': first_main.get('url'),
                         'height': first_main.get('height', 0),
