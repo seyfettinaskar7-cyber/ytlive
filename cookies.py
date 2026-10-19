@@ -18,9 +18,6 @@ def get_update_cookies(output_file="cookies.txt"):
 
             playwright_cookies = context.cookies()
             netscape_lines = [
-                "# Netscape HTTP Cookie File",
-                "# http://haxx.se",
-                "# This is a generated file!  Do not edit.",
                 "",
             ]
 
