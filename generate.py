@@ -274,19 +274,14 @@ class YouTubePlaylistGenerator:
                         'quality_tag': f"{video_formats[0].get('height', 0)}p"
                     }
                 
-                # --- YENİ EKLENEN KISIM: HLS Variant Link Yakalama (Ek istek atmaz) ---
+                # --- GÜÇLENDİRİLMİŞ HLS VARIANT YAKALAMA ---
                 hls_variant_url = None
                 for f in formats:
-                    f_url = f.get('manifest_url', '')
-                    if '.m3u8' in f_url and ('hls_variant' in f_url or 'manifest' in f_url or 'hls' in f_url):
+                    # manifest_url veya doğrudan url içindeki m3u8 uzantılarını tara
+                    f_url = f.get('manifest_url', '') or f.get('url', '')
+                    if '.m3u8' in f_url:
                         hls_variant_url = f_url
                         break
-                
-                if not hls_variant_url:
-                    for f in formats:
-                        if '.m3u8' in f.get('manifest_url', ''):
-                            hls_variant_url = f['manifest_url']
-                            break
                 
                 if hls_variant_url:
                     quality_streams['variant'] = {
@@ -295,7 +290,7 @@ class YouTubePlaylistGenerator:
                         'fps': 30,
                         'quality_tag': 'HLS Variant'
                     }
-                # -------------------------------------------------------------------
+                # -------------------------------------------
 
                 logo_path = self.fetch_channel_logo(channel_id, clean_name)
                 
@@ -737,7 +732,7 @@ class YouTubePlaylistGenerator:
                         playlists[profile_name].append(stream['url'])
                         playlists[profile_name].append("")
                 
-                # --- YENİ EKLENEN KISIM: Variant Playlist'e Ekleme ---
+                # Variant Playlist Eklemesi
                 if 'variant' in channel.get('streams', {}):
                     variant_stream = channel['streams']['variant']
                     playlists['variant'].append(
@@ -746,7 +741,6 @@ class YouTubePlaylistGenerator:
                     )
                     playlists['variant'].append(variant_stream['url'])
                     playlists['variant'].append("")
-                # -----------------------------------------------------
             
             elif channel.get('status') == 'offline':
                 stats['offline'] += 1
@@ -788,7 +782,7 @@ class YouTubePlaylistGenerator:
             'hd': 'streams_hd.m3u8',
             'mobile': 'streams_mobile.m3u8',
             'audio': 'streams_audio.m3u8',
-            'variant': 'streams_variant.m3u8'  # <-- Yeni dosya çıktısı
+            'variant': 'streams_variant.m3u8'
         }
         
         for name, filename in playlist_files.items():
