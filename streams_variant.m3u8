@@ -1,13 +1,16 @@
 #EXTM3U
 #EXT-X-VERSION:3
-# Generated: 2026-10-25 22:22:29 UTC
-# Total channels: 0
+# Generated: 2026-10-26 03:45:49 UTC
+# Total channels: 1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
 
+#EXTINF:-1 tvg-id="UCHPDorZxpe9c6WDnXKHCjYA" tvg-logo="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg" tvg-name="Ankara Büyükşehir Belediyesi" group-title="General",Ankara Büyükşehir Belediyesi [HLS Variant]
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1793007948/ei/7MzeapyLJYWQsfIPt7TLiQs/ip/2a09%3Abac5%3A6194%3A1846%3A%3A26b%3Add/id/t67tCvsDIt4.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/maudio/1/bui/AWzQHwrWiHO8peoQWPo2FUr3U4pnmtRumkzQE_ZpNsVDYZhnMizKaR75T9O9RWwL78VzqOaiBoSZfi2N/spc/mpRQ_xJXs-EbrZMeGWHHOa02jA7FXycu0N9Eu694djLOVXiChR9JM1pgaKi3tOkS/vprv/1/go/1/rqh/5/reg/0/pacing/0/epbp/1/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52184237/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIhAL3OTSvFSdHd-w9Yo502teRBTGk6TGNmvFCKsbx2IjDBAiAVTwU4x8bnOWGcLYGeh-0UpyZyuy8OFCc5N72tkb5BHA%3D%3D/file/index.m3u8
 
-# Summary: 0/0 streams active
-# Quality: 0x1080p, 0x720p, 0x480p
-# Categories: 
-# Countries: 
+
+# Summary: 1/1 streams active
+# Quality: 1x1080p, 0x720p, 0x480p
+# Categories: General:1
+# Countries: UK:1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
-# Updated: 2026-10-25 22:22:29 UTC
+# Updated: 2026-10-26 03:45:49 UTC
