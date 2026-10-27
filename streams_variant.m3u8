@@ -1,11 +1,11 @@
 #EXTM3U
 #EXT-X-VERSION:3
-# Generated: 2026-10-27 04:09:07 UTC
+# Generated: 2026-10-27 10:15:53 UTC
 # Total channels: 1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
 
 #EXTINF:-1 tvg-id="UCHPDorZxpe9c6WDnXKHCjYA" tvg-logo="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg" tvg-name="Ankara Büyükşehir Belediyesi" group-title="General",Ankara Büyükşehir Belediyesi [HLS Variant]
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1793095747/ei/4yPgavDCH9Kjt7EP38HfoQs/ip/2a09%3Abac1%3A7680%3A28%3A%3A4cf%3A19/id/t67tCvsDIt4.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/maudio/1/bui/AWzQHwoe8yAF4tQDYVrU4U_2cBLXa7ORcCkDciSIDSL7iSEqlLrsNdOoI6lk6ONKs8s9q_ZhU3BVevFg/spc/mpRQ_zh_aj8mrz48spdfkkMsV2yc9IAnTB09eJd0c8gBhKqjuMHOsTIzML5YRnmJ/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565116/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgKCEcadNHFA-eBnfCWlmkH4Rf3Qq6gPUaEpkjXLKpqYkCIEZsxfdg6KY88ZTnieEMixSwlzZHJnWlYtL0dG8cy3ta/file/index.m3u8
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1793117752/ei/2HngavHAOKnGsfIPobWJoQc/ip/2a09%3Abac5%3A6192%3A3141%3A%3A4e8%3A9/id/t67tCvsDIt4.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/maudio/1/bui/AWzQHwomf78EDX-kLp5zW19PplJgJpmieafzoSCX5vkPztrn0bfuSN3WMo_ve1QLyxFP99AEboQXa4Uw/spc/mpRQ__Y-gCd70qjZulkAebvTdBlQLF-3bqOUt2iMywV1mb45vlYGFDkPicya7H2g/vprv/1/go/1/rqh/5/reg/0/pacing/0/epbp/1/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565116%2C52184236/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgMqWGjtfuD-XPvOW1wRJsbXYKZiRpvQ9sPgRaLtHM6HsCIB4NRVf1f1e1Fatu-Qkjn6EHkcnUXePj_ET50-Cvclmq/file/index.m3u8
 
 
 # Summary: 1/1 streams active
@@ -13,4 +13,4 @@ https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1793095747/ei/4
 # Categories: General:1
 # Countries: UK:1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
-# Updated: 2026-10-27 04:09:07 UTC
+# Updated: 2026-10-27 10:15:53 UTC
