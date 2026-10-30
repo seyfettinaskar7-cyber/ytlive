@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20261030045045 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20261030111346 ">
   <channel id="UCHPDorZxpe9c6WDnXKHCjYA">
     <display-name>Ankara Büyükşehir Belediyesi</display-name>
     <icon src="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg"/>
   </channel>
-  <programme start="20261030045045 +0000" stop="20261030055045 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
-    <title>ABB WEB TV 2026-10-30 04:50</title>
+  <programme start="20261030111346 +0000" stop="20261030121346 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
+    <title>BİLGİ İŞLEM DAİRESİ BAŞKANLIĞI -Başkent Kart Ekosisteminin Gelir Paylaşımı Karşılığı İşletilmesi İşi 2026-10-30 11:13</title>
     <desc>Live YouTube stream from Ankara Büyükşehir Belediyesi</desc>
     <category>Live</category>
   </programme>
