@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20261103173710 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20261104002800 ">
   <channel id="UCHPDorZxpe9c6WDnXKHCjYA">
     <display-name>Ankara Büyükşehir Belediyesi</display-name>
     <icon src="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg"/>
   </channel>
-  <programme start="20261103173710 +0000" stop="20261103183710 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
-    <title>ANFA GENEL MÜDÜRLÜĞÜ - 4 Kalem Kamyon, Kamyonet ve Vinç Kiralama Hizmeti Alımı (Şoförsüz-Yakıtsız) 2026-11-03 17:37</title>
+  <programme start="20261104002800 +0000" stop="20261104012800 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
+    <title>ABB WEB TV 2026-11-04 00:28</title>
     <desc>Live YouTube stream from Ankara Büyükşehir Belediyesi</desc>
     <category>Live</category>
   </programme>
