@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-07T23:29:52.587390",
+  "generated": "2026-11-08T04:59:42.685462",
   "count": 1,
   "channels": [
     {
@@ -8,7 +8,7 @@
       "id": "UCHPDorZxpe9c6WDnXKHCjYA",
       "quality": "1080p",
       "status": "live",
-      "url": "https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1794115792/ei/cLTvasj3Efq1kucPiIeI4Q0/ip/2a09:bac5:c82f:2828::400:2/id/t67tCvsDIt4.1/itag/301/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D299/rqh/1/hls_chunk_host/rr7---sn-ajab55-5c.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/bui/AZFAFb83p7c8EllRghK7T-rKgj-_CM_tE0W73lcYWkRmQOjHeiFWiwbOmipc6lWMOb8ZDLlDkOq0Nh2y/spc/mpRQ_0IN14lKly64I6GaGdWtB8dVqjpl2XAzvttlXCu94gKNgHp57Vay5k8-/vprv/1/reg/0/playlist_type/DVR/met/1794094192,/mh/fS/mm/44/mn/sn-ajab55-5c/ms/lva/mv/u/mvi/7/pl/60/rms/lva,lva/dover/11/pacing/0/epbp/1/keepalive/yes/fexp/51565115/mt/1794093232/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,bui,spc,vprv,reg,playlist_type/sig/AE0s2JYwRQIgQRRwivLFKWHg-n_tiJ9vxH_rfc7zSI_n7_-uEFeSQBYCIQDQ7ar0d99C_AXcr-_VNUwtHvvxjirG7ErnDWwAPzOn6w%3D%3D/lsparams/hls_chunk_host,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRAIgAZA7p34Diq1kOVc7L2Pqqkymcct3JagJO5KdNeL3CWcCIEUNHg9rjTcdYHigaoedxWPEYxjWTMxBkPnVQSPp5WY3/playlist/index.m3u8",
+      "url": "https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1794135582/ei/vgHwapLgF-6_kucPnIOgsQI/ip/2a09:bac5:9f23:2828::400:a/id/t67tCvsDIt4.1/itag/301/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D299/rqh/1/hls_chunk_host/rr7---sn-ajab55-5c.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/bui/AZFAFb_BRbgItQ3_zCnaZam6RyyCAoRQnv968H7XVsZyvsb5E48NKE5glpcNlAWfJH-NMaDGdj2GHAc2/spc/mpRQ_zl7se7EFcy9OpJXs0e7Zihe55ir-T_XvSgcRht8Xz0sSNhS1pvZRWnl/vprv/1/reg/0/playlist_type/DVR/met/1794113982,/mh/fS/mm/44/mn/sn-ajab55-5c/ms/lva/mv/u/mvi/7/pl/39/rms/lva,lva/dover/11/pacing/0/epbp/1/keepalive/yes/fexp/51565116/mt/1794113099/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,bui,spc,vprv,reg,playlist_type/sig/AE0s2JYwRQIgfae7qYwHRoaOoHWwj_LQ81NAMMoLWpY7cgII7p6bfgYCIQDzmNm_tid8YKwwXijJiIYZ-fr7aLS6s5pnhM656fdg8g%3D%3D/lsparams/hls_chunk_host,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRQIgRJ7t1ZGW0Z7-2RQAg3kgG9GWjava0GD0asFl_zcVtwACIQDPeGtb824sE20GI7IYasHU-pBPzcOKsKS-OCwJdEiFUw%3D%3D/playlist/index.m3u8",
       "country": "UK"
     }
   ]
