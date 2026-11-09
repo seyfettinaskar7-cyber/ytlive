@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20261109050932 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20261109203039 ">
   <channel id="UCHPDorZxpe9c6WDnXKHCjYA">
     <display-name>Ankara Büyükşehir Belediyesi</display-name>
     <icon src="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg"/>
   </channel>
-  <programme start="20261109050932 +0000" stop="20261109060932 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
-    <title>ABB WEB TV 2026-11-09 05:09</title>
+  <programme start="20261109203039 +0000" stop="20261109213039 +0000" channel="UCHPDorZxpe9c6WDnXKHCjYA">
+    <title>ABB WEB TV 2026-11-09 20:30</title>
     <desc>Live YouTube stream from Ankara Büyükşehir Belediyesi</desc>
     <category>Live</category>
   </programme>
