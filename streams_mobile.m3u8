@@ -1,13 +1,16 @@
 #EXTM3U
 #EXT-X-VERSION:3
-# Generated: 2026-11-13 12:54:51 UTC
-# Total channels: 0
+# Generated: 2026-11-13 21:15:19 UTC
+# Total channels: 1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
 
+#EXTINF:-1 tvg-id="UCHPDorZxpe9c6WDnXKHCjYA" tvg-logo="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg" tvg-name="Ankara Büyükşehir Belediyesi" group-title="General",Ankara Büyükşehir Belediyesi [Mobile]
+https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1794626118/ei/5n33ao7sLJS_kucPvfHJyQg/ip/2a09:bac5:9f27:a0::10:526/id/t67tCvsDIt4.1/itag/94/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D135/rqh/1/hls_chunk_host/rr7---sn-ajab55-5c.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/bui/AZFAFb_9E4j-9wt0FCgy9z2OGbzmW2F7Gx59sIopyuJH5k4U1ExMEtVneyP2FrWD2J-ZaOMtdomLaK2H/spc/nfZ8Zv3MNqdyEx7YBs1t-jZV2HzoytJ1LUjakmWrN--v-uJponkXrWjQzJ8X/vprv/1/reg/0/playlist_type/DVR/initcwndbps/4020500/met/1794604519,/mh/fS/mm/44/mn/sn-ajab55-5c/ms/lva/mv/m/mvi/7/pl/39/rms/lva,lva/dover/11/pacing/0/epbp/1/keepalive/yes/fexp/51565115,52338434/mt/1794603917/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,bui,spc,vprv,reg,playlist_type/sig/AE0s2JYwRQIhAIAaR0fuCtcC5MKziChus5wi3xrNelGylgqnu5SZmpkbAiBJxBJr76XtUDTUTZv5owXRpBgvW062byoRBiYqiJh9pg%3D%3D/lsparams/hls_chunk_host,initcwndbps,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRQIgaYEAw4iy50yLffx9BN7WcflSfT1R_EDXqs9SxFIK2icCIQCCpfwAl7loTxn9pFc0kvVrVI-KcYHxz4ocA0DQTuPw-w%3D%3D/playlist/index.m3u8
 
-# Summary: 0/0 streams active
-# Quality: 0x1080p, 0x720p, 0x480p
-# Categories: 
-# Countries: 
+
+# Summary: 1/1 streams active
+# Quality: 1x1080p, 0x720p, 0x480p
+# Categories: General:1
+# Countries: UK:1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
-# Updated: 2026-11-13 12:54:51 UTC
+# Updated: 2026-11-13 21:15:19 UTC
