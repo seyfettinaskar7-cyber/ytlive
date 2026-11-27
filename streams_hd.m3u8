@@ -1,11 +1,11 @@
 #EXTM3U
 #EXT-X-VERSION:3
-# Generated: 2026-11-27 07:17:03 UTC
+# Generated: 2026-11-27 19:23:41 UTC
 # Total channels: 1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
 
 #EXTINF:-1 tvg-id="UCHPDorZxpe9c6WDnXKHCjYA" tvg-logo="logos/UCHPDorZxpe9c6WDnXKHCjYA.jpg" tvg-name="Ankara Büyükşehir Belediyesi" group-title="General",Ankara Büyükşehir Belediyesi [HD]
-https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1795785423/ei/by4Ja-6fAeORr9gP18SD8Q4/ip/2a09:bac1:76e1:5e78::39d:50/id/l3wDTgt2dl8.1/itag/301/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D299/rqh/1/hls_chunk_host/rr1---sn-qjp5q5-5h.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/bui/AZFAFb-Ia3tePQ2OSqu6Lm1a445c49uNZ_VyaTD-63WaYAhsYFjDAwzm-3wAnD9ZXiJRW95uUTLvuuue/spc/nfZ8ZsH8_B8BPIjHY-8_rJiyls2pqfWHGeM3kKIROKCzFpmaZVlTHBd9LIe3/vprv/1/reg/0/playlist_type/DVR/initcwndbps/6614250/met/1795763823,/mh/tE/mm/44/mn/sn-qjp5q5-5h/ms/lva/mv/m/mvi/1/pl/48/rms/lva,lva/dover/11/pacing/0/epbp/1/keepalive/yes/fexp/51565115/mt/1795763324/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,bui,spc,vprv,reg,playlist_type/sig/AE0s2JYwRQIgOKpzRq-MPpj2lGfQoVlyZU8DEcylh32bGPMt8O3aohkCIQCjhOT5h2uxGZRPub6Oyx5ScdihbScY3UGSw-o2yynpPw%3D%3D/lsparams/hls_chunk_host,initcwndbps,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRQIgWY3UBhNaPXQJYOEF64Pw3oEVBbE_kNxq64vmjxaQQ3cCIQDAa5CnJrvA1lMffz6G1wjk00p6qKyT2wuvvScMrE5j8Q%3D%3D/playlist/index.m3u8
+https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1795829021/ei/vdgJa_2fHdCP2_gPwe3PiQ4/ip/2a09:bac5:7492:2d2::48:9f/id/l3wDTgt2dl8.1/itag/301/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D299/rqh/1/hls_chunk_host/rr20---sn-ojn4v5-5g.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/bui/AZFAFb_SwkFUCUkSiXI8XBbY0oQbqdKMZnyrSP0Ig3SwyP8r1VXmEWcaMJdy3ikQpKYx4lP2pXLvshj9/spc/nfZ8ZtZ3RRTV32o9St3yty0KouifxYUZU1us-5z-yoqL8ni3J2peirufTtnq/vprv/1/reg/0/playlist_type/DVR/met/1795807421,/mh/tE/mm/44/mn/sn-ojn4v5-5g/ms/lva/mv/u/mvi/20/pl/38/rms/lva,lva/dover/11/pacing/0/epbp/1/keepalive/yes/fexp/51565116/mt/1795806852/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,bui,spc,vprv,reg,playlist_type/sig/AE0s2JYwRgIhAJI3A4cyNXKYWG-MxpIGMxKVLaP3YWM2sl145rkvTAiZAiEAr513zdv01peZs3UjAmUlYHUe-Wd-72Iurd_4uqdFPi8%3D/lsparams/hls_chunk_host,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRQIhALgLphSxM4ikrePZfO74EwCqWsIPGjL_HlwWNnwlKOaTAiA7PHdH9W8kZZDBQaNiECM8_QWM6D9C9dWNExk2Gn4CnA%3D%3D/playlist/index.m3u8
 
 
 # Summary: 1/1 streams active
@@ -13,4 +13,4 @@ https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1795785423/ei/
 # Categories: General:1
 # Countries: UK:1
 # Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/
-# Updated: 2026-11-27 07:17:03 UTC
+# Updated: 2026-11-27 19:23:41 UTC
